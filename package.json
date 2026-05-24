@@ -2,5 +2,8 @@
   "name": "malshi-sadeep-wedding",
   "version": "1.0.0",
   "description": "Digital wedding invitation for Malshi & Sadeep",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^13.10.0"
+  }
 }

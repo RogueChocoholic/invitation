@@ -357,15 +357,7 @@ if (musicBtn) {
   const submitBtn  = document.getElementById('rsvp-submit');
   const attYes     = document.getElementById('att-yes');
   const attNo      = document.getElementById('att-no');
-  const guestsGrp  = document.getElementById('guests-group');
   if (!form) return;
-
-  // Toggle guest count based on attendance selection
-  function toggleGuests() {
-    guestsGrp.style.display = attNo && attNo.checked ? 'none' : '';
-  }
-  attYes && attYes.addEventListener('change', toggleGuests);
-  attNo  && attNo.addEventListener('change', toggleGuests);
 
   function showErr(msg) {
     errEl.textContent = msg;
@@ -382,7 +374,6 @@ if (musicBtn) {
 
     const name      = form.querySelector('#rsvp-name').value.trim();
     const attending = form.querySelector('input[name="attending"]:checked');
-    const guests    = form.querySelector('#rsvp-guests').value;
     const message   = form.querySelector('#rsvp-message').value.trim();
 
     if (!name) {
@@ -405,7 +396,6 @@ if (musicBtn) {
         body:    JSON.stringify({
           name,
           attending: attending.value === 'yes',
-          guests: parseInt(guests, 10),
           message,
         }),
       });

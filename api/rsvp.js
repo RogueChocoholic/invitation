@@ -1,11 +1,7 @@
 // /api/rsvp.js
-// Handles POST requests to save RSVP submissions to rsvps.json
+// Handles POST requests to save RSVP submissions to Firestore
 
-const fs = require('fs');
-const path = require('path');
-
-// Path to the shared JSON data file (at project root)
-const DATA_FILE = path.join(process.cwd(), 'rsvps.json');
+const { db } = require('./_firebase');
 
 module.exports = async (req, res) => {
   // Only allow POST
@@ -23,7 +19,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { name, attending, guests, message } = req.body;
+    const { name, attending, message } = req.body;
 
     // Basic validation
     if (!name || typeof attending === 'undefined') {
@@ -34,25 +30,12 @@ module.exports = async (req, res) => {
     const entry = {
       name: String(name).trim(),
       attending: attending === true || attending === 'true' || attending === 'yes',
-      guests: parseInt(guests, 10) || 1,
       message: String(message || '').trim(),
       timestamp: new Date().toISOString(),
     };
 
-    // Read existing data
-    let rsvps = [];
-    if (fs.existsSync(DATA_FILE)) {
-      const raw = fs.readFileSync(DATA_FILE, 'utf8');
-      try {
-        rsvps = JSON.parse(raw);
-      } catch {
-        rsvps = [];
-      }
-    }
-
-    // Append and save
-    rsvps.push(entry);
-    fs.writeFileSync(DATA_FILE, JSON.stringify(rsvps, null, 2), 'utf8');
+    // Save to Firestore
+    await db.collection('rsvps').add(entry);
 
     return res.status(200).json({ success: true, message: 'RSVP saved successfully.' });
   } catch (err) {

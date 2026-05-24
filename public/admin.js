@@ -33,7 +33,6 @@ const logoutBtn      = document.getElementById('logout-btn');
 const statTotal      = document.getElementById('stat-total');
 const statAttending  = document.getElementById('stat-attending');
 const statDeclining  = document.getElementById('stat-declining');
-const statGuests     = document.getElementById('stat-guests');
 
 /* ─────────────────────────────────────────────────────────────
    SESSION HELPERS
@@ -126,14 +125,10 @@ function renderStats(rsvps) {
   const total     = rsvps.length;
   const attending = rsvps.filter(r => r.attending).length;
   const declining = total - attending;
-  const guests    = rsvps
-    .filter(r => r.attending)
-    .reduce((sum, r) => sum + (parseInt(r.guests, 10) || 1), 0);
 
   statTotal.textContent     = total;
   statAttending.textContent = attending;
   statDeclining.textContent = declining;
-  statGuests.textContent    = guests;
 
   statsRow.classList.remove('hidden');
   // Show the grid
@@ -176,7 +171,6 @@ function renderTable(rsvps) {
           ? '<span class="badge badge-yes">Yes</span>'
           : '<span class="badge badge-no">No</span>'}
       </td>
-      <td style="text-align: center;">${r.attending ? (r.guests || 1) : '—'}</td>
       <td class="msg-cell" style="${r.message ? '' : 'font-style: italic; color: var(--text-faint);'}">
         ${r.message ? esc(r.message) : 'No message'}
       </td>

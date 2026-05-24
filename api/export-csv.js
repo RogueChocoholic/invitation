@@ -1,10 +1,7 @@
 // /api/export-csv.js
-// Converts RSVP JSON data to a downloadable CSV file
+// Converts RSVP Firestore data to a downloadable CSV file
 
-const fs = require('fs');
-const path = require('path');
-
-const DATA_FILE = path.join(process.cwd(), 'rsvps.json');
+const { db } = require('./_firebase');
 
 // Simple admin password — must match get-rsvps.js
 const ADMIN_PASSWORD = 'wedding2025';
@@ -39,23 +36,19 @@ module.exports = async (req, res) => {
   }
 
   try {
-    let rsvps = [];
-    if (fs.existsSync(DATA_FILE)) {
-      const raw = fs.readFileSync(DATA_FILE, 'utf8');
-      try {
-        rsvps = JSON.parse(raw);
-      } catch {
-        rsvps = [];
-      }
-    }
+    const snapshot = await db.collection('rsvps').orderBy('timestamp', 'desc').get();
+    const rsvps = [];
+    
+    snapshot.forEach(doc => {
+      rsvps.push(doc.data());
+    });
 
     // Build CSV string
-    const header = 'Name,Attending,Guests,Message,Timestamp';
+    const header = 'Name,Attending,Message,Timestamp';
     const rows = rsvps.map(r =>
       [
         csvEscape(r.name),
         csvEscape(r.attending ? 'Yes' : 'No'),
-        csvEscape(r.guests),
         csvEscape(r.message),
         csvEscape(r.timestamp),
       ].join(',')
