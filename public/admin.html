@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Malshi &amp; Sadeep Wedding</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Shared design system -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ── Admin-only styles ─────────────────────────────────── */
+
+    body { background: var(--bg); }
+
+    /* Login screen */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      padding: 3.5rem 2.5rem;
+      border: 1px solid var(--secondary);
+      background: var(--bg);
+      text-align: center;
+    }
+
+    /* Dashboard layout */
+    .dash-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top bar */
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 1.5rem 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--secondary);
+    }
+
+    .dash-title {
+      font-family: var(--script);
+      font-size: 1.8rem;
+      color: var(--accent-dark);
+      line-height: 1;
+    }
+
+    .dash-subtitle {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-top: 0.25rem;
+    }
+
+    /* Stats row */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--secondary);
+      border: 1px solid var(--secondary);
+      margin-bottom: 2rem;
+    }
+
+    .stat-cell {
+      background: var(--bg);
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--accent-dark);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-top: 0.5rem;
+    }
+
+    /* Table */
+    .rsvp-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .rsvp-table th {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      padding: 0.9rem 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid var(--secondary);
+      background: var(--bg-warm);
+      position: sticky;
+      top: 0;
+    }
+
+    .rsvp-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--secondary);
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--text-mid);
+      vertical-align: top;
+    }
+
+    .rsvp-table tr:last-child td { border-bottom: none; }
+
+    .rsvp-table tr:hover td {
+      background: rgba(198,167,105,0.03);
+    }
+
+    .rsvp-table td:first-child {
+      font-family: var(--serif);
+      color: var(--text-faint);
+      font-size: 0.8rem;
+    }
+
+    /* Attending badges */
+    .badge {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+    }
+
+    .badge-yes { background: rgba(100,160,100,0.1); color: #3a6e3a; }
+    .badge-no  { background: rgba(180,80,80,0.1);  color: #7a3030; }
+
+    /* Message cell */
+    .msg-cell {
+      max-width: 280px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Loading / empty states */
+    .state-text {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--text-faint);
+      font-size: 1rem;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* Logout / action link */
+    .action-link {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .action-link:hover { color: var(--accent-dark); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════════ -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="kandyan-divider" style="font-size: 1rem;">✦</div>
+    <h1 class="dash-title" style="margin: 0.75rem 0 0.25rem;">Admin Panel</h1>
+    <p style="font-family: var(--serif); font-style: italic; font-size: 0.88rem; color: var(--text-soft); margin-bottom: 2.5rem;">
+      Malshi &amp; Sadeep · RSVP Management
+    </p>
+
+    <form id="login-form" novalidate>
+      <div class="form-group" style="text-align: left;">
+        <label class="form-label" for="admin-pass">Password</label>
+        <input type="password" id="admin-pass" class="form-input"
+               placeholder="Enter admin password"
+               autocomplete="current-password" required />
+      </div>
+
+      <p id="login-error"
+         class="hidden"
+         style="font-family: var(--serif); font-style: italic; font-size: 0.88rem; color: #7a3030; margin-bottom: 1.25rem; text-align: left;">
+        Incorrect password. Please try again.
+      </p>
+
+      <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+        Sign In
+      </button>
+    </form>
+
+    <p style="margin-top: 2rem;">
+      <a href="index.html" class="action-link">← Back to Invitation</a>
+    </p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════════════ -->
+<div id="dashboard" class="dash-wrap hidden">
+
+  <!-- Header -->
+  <header class="dash-header">
+    <div>
+      <div class="dash-title">RSVP Dashboard</div>
+      <p class="dash-subtitle">Malshi &amp; Sadeep · 10th September</p>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
+      <button id="export-btn" class="btn-outline" style="padding: 0.65rem 1.4rem; font-size: 0.68rem;" aria-label="Export RSVPs as CSV">
+        ↓ &nbsp;Export CSV
+      </button>
+      <button id="refresh-btn" class="btn-outline" style="padding: 0.65rem 1.4rem; font-size: 0.68rem;" aria-label="Refresh RSVP list">
+        ↻ &nbsp;Refresh
+      </button>
+      <button id="logout-btn" class="action-link">Log out</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main style="flex: 1; max-width: 1100px; margin: 0 auto; width: 100%; padding: 2.5rem 1.5rem;">
+
+    <!-- Loading state -->
+    <div id="admin-loading" class="state-text">Loading RSVP data…</div>
+
+    <!-- Error state -->
+    <p id="admin-error" class="state-text hidden" style="color: #7a3030;"></p>
+
+    <!-- Stats -->
+    <div id="stats-row" class="stats-grid hidden">
+      <div class="stat-cell">
+        <div class="stat-number" id="stat-total">0</div>
+        <div class="stat-label">Total RSVPs</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number" id="stat-attending">0</div>
+        <div class="stat-label">Attending</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number" id="stat-declining">0</div>
+        <div class="stat-label">Declining</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number" id="stat-guests">0</div>
+        <div class="stat-label">Total Guests</div>
+      </div>
+    </div>
+
+    <!-- Table container -->
+    <div id="table-container" class="hidden" style="border: 1px solid var(--secondary); overflow-x: auto;">
+      <table class="rsvp-table" aria-label="RSVP submissions">
+        <thead>
+          <tr>
+            <th style="width:44px;">#</th>
+            <th>Name</th>
+            <th>Attending</th>
+            <th style="width:80px;">Guests</th>
+            <th>Message</th>
+            <th style="width:160px;">Submitted</th>
+          </tr>
+        </thead>
+        <tbody id="rsvp-tbody"></tbody>
+      </table>
+
+      <p id="no-rsvps"
+         class="hidden state-text"
+         style="padding: 2.5rem;">
+        No RSVPs yet. They will appear here once guests respond.
+      </p>
+    </div>
+
+  </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
