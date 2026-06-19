@@ -132,12 +132,17 @@ const PetalSystem = (() => {
 
 /* ─────────────────────────────────────────────────────────────
    ENVELOPE OPEN SEQUENCE
+   The letter is concealed behind the opaque envelope front. On open
+   the flap swings up, is dropped BEHIND the letter, and the letter
+   then lifts up and out of the top — ending in front of the flap,
+   above the envelope (so it reads as being pulled out, not through).
    Timeline (approximate):
-     0ms    — hint text hides, seal fades, flap rotates open
-     500ms  — inner card slides up, petals start
-     900ms  — couple names appear below envelope
-     1800ms — names reveal fades in fully
-     2400ms — envelope fades out, main content fades in
+     0ms    — hint hides, seal fades, flap rotates open
+     350ms  — petals start
+     900ms  — flap drops behind the letter
+     950ms  — letter lifts up and out of the envelope
+     1700ms — couple names fade in below
+     3300ms — envelope fades out, main content fades in
 ───────────────────────────────────────────────────────────── */
 function openEnvelope() {
   if (state.envelopeOpened) return;
@@ -145,49 +150,48 @@ function openEnvelope() {
 
   const hint        = document.getElementById('env-hint');
   const flap        = document.getElementById('env-flap');
+  const flapWrap    = document.getElementById('env-flap-wrap');
   const seal        = document.getElementById('env-seal');
   const card        = document.getElementById('env-card');
   const envScreen   = document.getElementById('envelope-screen');
   const mainContent = document.getElementById('main-content');
   const namesReveal = document.getElementById('env-names-reveal');
 
-  // 1. Hide hint immediately
+  // 1. Hide hint + seal
   if (hint) hint.classList.add('hide');
-
-  // 2. Fade out seal (it's behind the flap)
   if (seal) seal.classList.add('hide');
 
-  // 3. Open flap — rotate it back (like opening a lid)
-  //    We use a JS-driven transition so we can chain exactly
+  // 2. Open flap — rotate it back like a lid (stays in front while opening)
   if (flap) {
     flap.style.transition = 'transform 0.9s cubic-bezier(0.4, 0, 0.2, 1)';
-    // rotateX(180deg) swings the flap backward (open)
     flap.style.transform  = 'rotateX(180deg)';
   }
 
-  // 4. Petals start at flap-open moment
-  setTimeout(() => {
-    PetalSystem.start(20);
-  }, 350);
+  // 3. Petals
+  setTimeout(() => PetalSystem.start(20), 350);
 
-  // 5. Inner card rises
+  // 4. Once the flap is open, drop it BEHIND the letter
   setTimeout(() => {
-    if (card) {
-      card.style.transition = 'transform 0.9s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.7s ease';
-      card.style.transform  = 'translateY(-38%)';
-      card.style.opacity    = '1';
-    }
-  }, 520);
-
-  // 6. Names reveal below envelope
-  setTimeout(() => {
-    if (namesReveal) namesReveal.style.opacity = '1';
+    if (flapWrap) flapWrap.style.zIndex = '1';
   }, 900);
 
-  // 7. Petals start fading after 4 s
-  setTimeout(() => PetalSystem.stop(3000), 4000);
+  // 5. Letter lifts up and out of the envelope's top
+  setTimeout(() => {
+    if (card) {
+      card.style.transition = 'transform 1s cubic-bezier(0.2, 0, 0.2, 1)';
+      card.style.transform  = 'translateY(-100%)';
+    }
+  }, 950);
 
-  // 8. Transition to main page
+  // 6. Names reveal below the envelope
+  setTimeout(() => {
+    if (namesReveal) namesReveal.style.opacity = '1';
+  }, 1700);
+
+  // 7. Petals start fading
+  setTimeout(() => PetalSystem.stop(3000), 4200);
+
+  // 8. Transition to the main page
   setTimeout(() => {
     if (envScreen) envScreen.classList.add('fade-out');
     if (mainContent) {
@@ -195,18 +199,14 @@ function openEnvelope() {
       mainContent.style.opacity    = '1';
     }
 
-    // Try to start music (user has now interacted)
     attemptMusicStart();
-
-    // Trigger hero reveal after main content appears
     setTimeout(triggerHeroReveal, 400);
 
-    // Fully remove envelope from layout after transition
     setTimeout(() => {
       if (envScreen) envScreen.style.display = 'none';
     }, 1200);
 
-  }, 2400);
+  }, 3300);
 }
 
 // Expose globally (called from HTML onclick)
@@ -303,7 +303,7 @@ if (musicBtn) {
 
 /* ─────────────────────────────────────────────────────────────
    COUNTDOWN TIMER
-   Target: 10th September. If date has passed, advances to next year.
+   Target: 5th August. If date has passed, advances to next year.
 ───────────────────────────────────────────────────────────── */
 (function initCountdown() {
   const elDays  = document.getElementById('cd-days');
@@ -316,8 +316,8 @@ if (musicBtn) {
 
   function getWeddingDate() {
     const now    = new Date();
-    let target   = new Date(now.getFullYear(), 8, 10, 9, 0, 0);  // Sep = month 8
-    if (now >= target) target = new Date(now.getFullYear() + 1, 8, 10, 9, 0, 0);
+    let target   = new Date(now.getFullYear(), 7, 5, 17, 0, 0);  // Aug = month 7, 5pm ceremony
+    if (now >= target) target = new Date(now.getFullYear() + 1, 7, 5, 17, 0, 0);
     return target;
   }
 

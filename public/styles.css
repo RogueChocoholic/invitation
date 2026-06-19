@@ -8,30 +8,39 @@
 
 /* ── Design Tokens ────────────────────────────────────────── */
 :root {
-  --bg:           #F8F5F0;
-  --bg-warm:      #F2EDE4;
-  --secondary:    #E8DCCB;
-  --accent:       #C6A769;
-  --accent-dark:  #A8894A;
+  --bg: #F8F5F0;
+  --bg-warm: #F2EDE4;
+  --secondary: #E8DCCB;
+  --accent: #C6A769;
+  --accent-dark: #A8894A;
   --accent-light: #DCC99A;
-  --text:         #2C2C2C;
-  --text-mid:     #5A5248;
-  --text-soft:    #8C7E6E;
-  --text-faint:   #B5A898;
-  --serif:        'Playfair Display', 'Georgia', serif;
-  --script:       'Pinyon Script', cursive;
-  --sans:         'Inter', system-ui, sans-serif;
+  --text: #2C2C2C;
+  --text-mid: #5A5248;
+  --text-soft: #8C7E6E;
+  --text-faint: #B5A898;
+  --serif: 'Playfair Display', 'Georgia', serif;
+  --script: 'Pinyon Script', cursive;
+  --sans: 'Inter', system-ui, sans-serif;
 
   /* Motion */
   --ease-elegant: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-enter:   cubic-bezier(0.0, 0.0, 0.2, 1);
-  --ease-exit:    cubic-bezier(0.4, 0.0, 1, 1);
+  --ease-enter: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0.0, 1, 1);
 }
 
 /* ── Reset ────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
 
 body {
   background: var(--bg);
@@ -76,11 +85,20 @@ body {
   transition: opacity 0.4s;
 }
 
-.env-hint.hide { opacity: 0; }
+.env-hint.hide {
+  opacity: 0;
+}
 
 @keyframes envHintPulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Envelope wrapper — establishes 3D perspective */
@@ -96,27 +114,32 @@ body {
 .env-body {
   position: relative;
   width: 100%;
-  padding-top: 66%;          /* ~3:2 envelope ratio */
+  padding-top: 66%;
+  /* ~3:2 envelope ratio */
   background: var(--secondary);
   border: 1px solid var(--accent-light);
   box-shadow:
     0 8px 40px rgba(44, 44, 44, 0.10),
-    0 2px 8px  rgba(44, 44, 44, 0.06);
+    0 2px 8px rgba(44, 44, 44, 0.06);
   overflow: hidden;
   transition: box-shadow 0.3s;
+  /* Front sits ABOVE the letter so the letter stays hidden until it lifts out */
+  z-index: 5;
 }
 
 #envelope-wrap:hover .env-body {
   box-shadow:
     0 12px 50px rgba(44, 44, 44, 0.14),
-    0 4px 12px  rgba(44, 44, 44, 0.08);
+    0 4px 12px rgba(44, 44, 44, 0.08);
 }
 
 /* Bottom triangle fold lines inside the body */
 .env-body::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 0;
   border-left: 50% solid transparent;
   border-right: 50% solid transparent;
@@ -129,8 +152,10 @@ body {
 .env-body::before {
   content: '';
   position: absolute;
-  top: 0; left: 0;
-  width: 0; height: 0;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   border-top: 50% solid transparent;
   border-bottom: 50% solid transparent;
   border-left: 46% solid var(--bg-warm);
@@ -171,8 +196,11 @@ body {
 /* ──── Envelope Flap (top triangle that opens) ──── */
 .env-flap-wrap {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;                          /* flap covers top half */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  /* flap covers top half */
   perspective: 900px;
   transform-origin: top;
   z-index: 10;
@@ -188,7 +216,8 @@ body {
   border-top: 1px solid var(--accent-light);
   transform-origin: top center;
   transform: rotateX(0deg);
-  transition: transform 0s;            /* JS controls this */
+  transition: transform 0s;
+  /* JS controls this */
   will-change: transform;
   /* Triangle shape: a downward-pointing triangle */
   clip-path: polygon(0 0, 100% 0, 50% 100%);
@@ -199,21 +228,25 @@ body {
 /* ──── Inner card that rises from envelope ──── */
 .env-card {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 90%;
+  bottom: 0;
+  left: 7%;
+  right: 7%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--bg);
   border: 1px solid var(--accent-light);
-  padding: 2rem 1.5rem;
+  padding: 1.5rem 1.25rem;
   text-align: center;
-  transform: translateY(100%);         /* hidden below */
-  opacity: 0;
-  transition: transform 0s, opacity 0s;
-  will-change: transform, opacity;
-  z-index: 4;
+  /* Starts fully inside, concealed behind the opaque front (z-index 5).
+     Sits ABOVE the flap once the flap is dropped behind on open. */
+  transform: translateY(0);
+  transition: transform 0s;
+  will-change: transform;
+  z-index: 3;
+  box-shadow: 0 -4px 16px rgba(44, 44, 44, 0.05);
 }
 
 .env-card-names {
@@ -248,13 +281,21 @@ body {
   transition: opacity 0.5s;
 }
 
-#petal-canvas.show { opacity: 1; }
-#petal-canvas.hide { opacity: 0; transition: opacity 1.5s; }
+#petal-canvas.show {
+  opacity: 1;
+}
+
+#petal-canvas.hide {
+  opacity: 0;
+  transition: opacity 1.5s;
+}
 
 /* ── Fixed Navigation ─────────────────────────────────────── */
 #site-nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 500;
   padding: 1.25rem 2rem;
   display: flex;
@@ -268,7 +309,7 @@ body {
   background: rgba(248, 245, 240, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 0 rgba(198,167,105,0.18);
+  box-shadow: 0 1px 0 rgba(198, 167, 105, 0.18);
 }
 
 #site-nav a {
@@ -282,7 +323,9 @@ body {
   transition: color 0.25s;
 }
 
-#site-nav a:hover { color: var(--accent-dark); }
+#site-nav a:hover {
+  color: var(--accent-dark);
+}
 
 /* ── Music Button (top-right fixed) ──────────────────────── */
 #music-btn {
@@ -319,58 +362,147 @@ body {
 /* ── HERO ─────────────────────────────────────────────────── */
 #hero {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 8rem 1.5rem 5rem;
+  padding: 7rem 1.5rem 5rem;
   position: relative;
-  background: var(--bg);
+  overflow: hidden;
+  background:
+    radial-gradient(130% 80% at 50% 0%, rgba(220, 201, 154, 0.22), transparent 58%),
+    linear-gradient(to bottom, var(--bg) 55%, var(--bg-warm));
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .hero-eyebrow {
   font-family: var(--sans);
-  font-size: 0.68rem;
+  font-size: clamp(0.58rem, 1.8vw, 0.7rem);
   font-weight: 400;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .hero-names {
   font-family: var(--script);
-  font-size: clamp(4rem, 12vw, 8rem);
+  font-size: clamp(3.6rem, 13vw, 8rem);
   color: var(--accent-dark);
-  line-height: 1.05;
-  margin-bottom: 0.5rem;
+  line-height: 1.02;
 }
 
 .hero-amp {
   font-family: var(--script);
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2.2rem, 8vw, 5rem);
   color: var(--accent-light);
   display: block;
   line-height: 1;
 }
 
+/* Date flanked by thin gold rules */
+.hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.9rem, 3vw, 1.5rem);
+  margin-top: 2.25rem;
+}
+
+.hero-meta-line {
+  display: block;
+  height: 1px;
+  width: clamp(28px, 12vw, 64px);
+  background: linear-gradient(to right, transparent, var(--accent-light));
+}
+
+.hero-meta-line:last-child {
+  background: linear-gradient(to left, transparent, var(--accent-light));
+}
+
 .hero-date {
   font-family: var(--serif);
-  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  font-size: clamp(0.9rem, 2.6vw, 1.1rem);
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-mid);
-  margin-top: 2rem;
+  white-space: nowrap;
+}
+
+.hero-date sup {
+  font-size: 0.55em;
+  letter-spacing: 0;
 }
 
 .hero-venue {
   font-family: var(--serif);
   font-style: italic;
-  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
   color: var(--text-soft);
-  margin-top: 0.4rem;
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+/* Animated scroll cue */
+.hero-scroll {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: clamp(2.5rem, 6vw, 3.75rem);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  transition: color 0.25s;
+}
+
+.hero-scroll:hover {
+  color: var(--accent);
+}
+
+.hero-scroll-chevron {
+  width: 9px;
+  height: 9px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+  animation: heroScrollBounce 2s var(--ease-elegant) infinite;
+}
+
+@keyframes heroScrollBounce {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translateY(5px) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-chevron {
+    animation: none;
+  }
 }
 
 /* ── Ornamental Divider ───────────────────────────────────── */
@@ -467,7 +599,10 @@ body {
   color: var(--text-mid);
 }
 
-.invite-text em { color: var(--accent-dark); font-style: italic; }
+.invite-text em {
+  color: var(--accent-dark);
+  font-style: italic;
+}
 
 /* ── Couple ───────────────────────────────────────────────── */
 .couple-name {
@@ -493,6 +628,228 @@ body {
   color: var(--text-soft);
   line-height: 1.8;
   margin-top: 0.75rem;
+}
+
+/* ── Wedding Party ────────────────────────────────────────── */
+.party-intro {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+  color: var(--text-soft);
+  text-align: center;
+  max-width: 540px;
+  margin: -2rem auto 0;
+  line-height: 1.95;
+}
+
+.party-intro em {
+  color: var(--accent-dark);
+}
+
+.party-group {
+  margin-top: 4rem;
+}
+
+.party-group-title {
+  font-family: var(--script);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 400;
+  color: var(--accent-dark);
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+
+.party-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2.75rem 2rem;
+  max-width: 820px;
+  margin: 2.25rem auto 0;
+}
+
+.party-card {
+  width: 172px;
+  margin: 0;
+  text-align: center;
+  transition: transform 0.3s var(--ease-elegant);
+}
+
+.party-card:hover {
+  transform: translateY(-4px);
+}
+
+.party-photo {
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 1.1rem;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--accent-light);
+  box-shadow: 0 4px 18px rgba(44, 44, 44, 0.06);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.party-card:hover .party-photo {
+  border-color: var(--accent);
+  box-shadow: 0 8px 26px rgba(44, 44, 44, 0.10);
+}
+
+.party-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Elegant monogram placeholder shown until a real photo is added */
+.party-photo[data-initial]::before {
+  content: attr(data-initial);
+  font-family: var(--script);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--accent-light);
+}
+
+.party-photo:has(img)::before {
+  content: none;
+}
+
+.party-name {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.party-role {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 0.4rem;
+}
+
+.party-bio {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+  margin-top: 0.65rem;
+}
+
+/* ── Order of Events (Timeline) ───────────────────────────── */
+.timeline {
+  list-style: none;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 7px;
+  width: 1px;
+  background: linear-gradient(to bottom,
+      transparent,
+      var(--accent-light) 10%,
+      var(--accent-light) 90%,
+      transparent);
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 2.75rem 2.75rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--bg-warm);
+  border: 1.5px solid var(--accent);
+}
+
+.timeline-marker::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.timeline-time {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+
+.timeline-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.timeline-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+  line-height: 1.7;
+  margin-top: 0.4rem;
+}
+
+/* ── Seaside Dress-Code Note ──────────────────────────────── */
+.dress-note {
+  max-width: 460px;
+  margin: 2.75rem auto 0;
+  padding: 1.6rem 2rem;
+  border: 1px solid var(--secondary);
+  background: var(--bg);
+}
+
+.dress-note-label {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.dress-note-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  line-height: 1.7;
 }
 
 /* ── Event Detail Cards ───────────────────────────────────── */
@@ -543,7 +900,7 @@ body {
   padding: 0 2rem;
 }
 
-.countdown-item + .countdown-item {
+.countdown-item+.countdown-item {
   border-left: 1px solid var(--secondary);
 }
 
@@ -578,7 +935,7 @@ body {
   margin: 0 auto;
 }
 
-.tradition-text + .tradition-text {
+.tradition-text+.tradition-text {
   margin-top: 1.5rem;
 }
 
@@ -599,10 +956,124 @@ body {
   color: var(--text-faint);
 }
 
-/* ── RSVP Section ─────────────────────────────────────────── */
-.rsvp-form { max-width: 500px; margin: 0 auto; }
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--secondary);
+}
 
-.form-group { margin-bottom: 1.75rem; }
+/* ── Location / Venue Map ─────────────────────────────────── */
+.venue-card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px -34px rgba(80, 64, 38, 0.30),
+    0 2px 10px rgba(80, 64, 38, 0.05);
+}
+
+.venue-map {
+  position: relative;
+  width: 100%;
+  /* Responsive height: comfortable on desktop, generous on mobile */
+  height: clamp(340px, 46vh, 480px);
+  background: var(--secondary);
+}
+
+.venue-map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  filter: saturate(0.78) sepia(0.06);
+}
+
+.venue-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 1.85rem;
+  text-align: left;
+  border-top: 1px solid var(--secondary);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FCFAF6 100%);
+}
+
+.venue-info-text {
+  min-width: 0;
+}
+
+.venue-name {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--accent-dark);
+  line-height: 1.25;
+}
+
+.venue-address {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+  margin-top: 0.3rem;
+}
+
+.venue-btn {
+  flex-shrink: 0;
+}
+
+/* ── RSVP Section ─────────────────────────────────────────── */
+.rsvp-deadline {
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.98rem;
+  color: var(--text-soft);
+  margin-bottom: 2.75rem;
+}
+
+/* Framed reply card */
+.rsvp-card {
+  position: relative;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 3.25rem 3.25rem 3rem;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FCFAF6 100%);
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
+  box-shadow:
+    0 30px 60px -34px rgba(80, 64, 38, 0.30),
+    0 2px 10px rgba(80, 64, 38, 0.05);
+}
+
+/* Gold accent rule centered at the top edge of the card */
+.rsvp-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.rsvp-form {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.75rem;
+}
 
 .form-label {
   display: block;
@@ -653,23 +1124,82 @@ body {
   min-height: 90px;
 }
 
-.radio-group { display: flex; gap: 2rem; }
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  font-family: var(--serif);
-  font-size: 0.95rem;
-  color: var(--text-mid);
+/* Selectable attendance cards (replaces plain radio buttons) */
+.attend-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
 }
 
-.radio-option input[type="radio"] {
-  accent-color: var(--accent-dark);
-  width: 1rem;
-  height: 1rem;
+.attend-option {
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+.attend-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.attend-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 1rem 0.85rem;
+  border: 1px solid var(--secondary);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text-mid);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  transition: border-color 0.25s, background 0.25s, color 0.25s, box-shadow 0.25s;
+}
+
+.attend-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-light);
+  background: transparent;
+  color: transparent;
+  font-style: normal;
+  font-size: 0.62rem;
+  line-height: 1;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.attend-option:hover .attend-card {
+  border-color: var(--accent-light);
+}
+
+.attend-option input:checked + .attend-card {
+  border-color: var(--accent);
+  background: rgba(198, 167, 105, 0.10);
+  color: var(--accent-dark);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.attend-option input:checked + .attend-card .attend-mark {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #fff;
+}
+
+.attend-option input:focus-visible + .attend-card {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ── Primary Button ───────────────────────────────────────── */
@@ -697,7 +1227,30 @@ body {
   transform: translateY(-1px);
 }
 
-.btn-primary:active { transform: translateY(0); }
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.25s var(--ease-elegant);
+}
+
+.btn-primary:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* RSVP submit — full width within the card for a balanced form feel */
+.rsvp-submit-row {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.rsvp-submit-row .btn-primary {
+  width: 100%;
+  justify-content: center;
+  padding: 1rem 2.8rem;
+}
 
 .btn-outline {
   display: inline-flex;
@@ -720,16 +1273,19 @@ body {
 .btn-outline:hover {
   border-color: var(--accent);
   color: var(--accent);
-  background: rgba(198,167,105,0.04);
+  background: rgba(198, 167, 105, 0.04);
 }
 
 /* ── RSVP Success ─────────────────────────────────────────── */
 #rsvp-success {
   display: none;
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 1.5rem 0.5rem;
 }
-#rsvp-success.show { display: block; }
+
+#rsvp-success.show {
+  display: block;
+}
 
 .success-icon {
   font-size: 2rem;
@@ -772,24 +1328,51 @@ body {
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.35s; }
+.reveal-delay-1 {
+  transition-delay: 0.1s;
+}
+
+.reveal-delay-2 {
+  transition-delay: 0.2s;
+}
+
+.reveal-delay-3 {
+  transition-delay: 0.35s;
+}
 
 /* ── Keyframes ────────────────────────────────────────────── */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes subtleFloat {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-5px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -800,12 +1383,23 @@ body {
 @media (max-width: 640px) {
 
   /* Sections */
-  .section { padding: 4rem 1.25rem; }
-  .section-heading { margin-bottom: 2rem; }
+  .section {
+    padding: 4rem 1.25rem;
+  }
+
+  .section-heading {
+    margin-bottom: 2rem;
+  }
 
   /* ── Envelope ── */
-  #envelope-wrap { width: min(320px, 92vw); }
-  .env-hint { font-size: 0.8rem; margin-bottom: 1.75rem; }
+  #envelope-wrap {
+    width: min(320px, 92vw);
+  }
+
+  .env-hint {
+    font-size: 0.8rem;
+    margin-bottom: 1.75rem;
+  }
 
   .env-card-names {
     font-size: clamp(1.6rem, 7vw, 2.2rem);
@@ -825,21 +1419,44 @@ body {
 
   /* Hide "Traditions" and "Contact" on tiny screens to avoid overflow */
   @media (max-width: 380px) {
-    #site-nav a[href="#traditional"],
+
+    #site-nav a[href="#wedding-party"],
+    #site-nav a[href="#schedule"],
     #site-nav a[href="#contact"] {
       display: none;
     }
   }
 
   /* Music btn: move down a touch so it doesn't clash with nav */
-  #music-btn { top: 0.75rem; right: 0.75rem; }
+  #music-btn {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
 
   /* ── Hero ── */
-  #hero { padding: 7rem 1.25rem 4rem; }
-  .hero-names { font-size: clamp(3.2rem, 14vw, 5rem); }
-  .hero-amp   { font-size: clamp(2rem, 10vw, 3rem); }
-  .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.2em; margin-bottom: 1.25rem; }
-  .hero-date  { margin-top: 1.25rem; font-size: 0.75rem; letter-spacing: 0.16em; }
+  #hero {
+    padding: 7rem 1.25rem 4rem;
+  }
+
+  .hero-names {
+    font-size: clamp(3.2rem, 14vw, 5rem);
+  }
+
+  .hero-amp {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-date {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+  }
 
   /* ── Invitation Card ── */
   .invite-card {
@@ -849,7 +1466,10 @@ body {
     margin-right: 0;
   }
 
-  .invite-text { font-size: 0.95rem; line-height: 1.95; }
+  .invite-text {
+    font-size: 0.95rem;
+    line-height: 1.95;
+  }
 
   /* ── Couple Section ── */
   /* The flex row separator (the ✦ + lines) needs to become horizontal on mobile */
@@ -874,21 +1494,80 @@ body {
     background: var(--secondary) !important;
   }
 
-  .couple-name { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+  .couple-name {
+    font-size: clamp(2.4rem, 12vw, 3.5rem);
+  }
+
+  /* ── Wedding Party ── */
+  .party-intro {
+    margin-top: -1rem;
+    font-size: 0.92rem;
+    line-height: 1.85;
+  }
+
+  .party-group {
+    margin-top: 3rem;
+  }
+
+  .party-grid {
+    gap: 2.25rem 1.25rem;
+    max-width: 360px;
+  }
+
+  .party-card {
+    width: 44%;
+    max-width: 160px;
+  }
+
+  .party-photo {
+    width: 104px;
+    height: 104px;
+    margin-bottom: 0.85rem;
+  }
+
+  .party-photo[data-initial]::before {
+    font-size: 2.1rem;
+  }
+
+  .party-name {
+    font-size: 0.98rem;
+  }
+
+  .party-bio {
+    font-size: 0.78rem;
+  }
+
+  /* ── Timeline ── */
+  .timeline {
+    max-width: 100%;
+  }
+
+  .timeline-item {
+    padding-left: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
 
   /* ── Event Details grid ──
      On mobile the 3-column grid stacks.
      Tailwind's divide-y handles the separators correctly,
      but we need to remove the md:divide-x borders. */
-  #event-details .grid { border: 1px solid var(--secondary); }
-  .detail-item { padding: 1.75rem 1.25rem; }
-  .detail-value { font-size: 1.1rem; }
+  #event-details .grid {
+    border: 1px solid var(--secondary);
+  }
 
-  /* ── Map ── */
-  #location iframe { height: 220px; }
+  .detail-item {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .detail-value {
+    font-size: 1.1rem;
+  }
 
   /* ── Traditional ── */
-  .tradition-text { font-size: 0.92rem; line-height: 1.9; }
+  .tradition-text {
+    font-size: 0.92rem;
+    line-height: 1.9;
+  }
 
   /* ── Countdown ──
      On mobile: remove left-border dividers (they look wrong when wrapping)
@@ -905,7 +1584,8 @@ body {
   .countdown-item {
     padding: 1.5rem 1rem;
     border: none;
-    border-left: none !important;   /* override the + sibling rule */
+    border-left: none !important;
+    /* override the + sibling rule */
   }
 
   /* Re-add thin internal grid lines */
@@ -919,22 +1599,57 @@ body {
     border-right: 1px solid var(--secondary);
   }
 
-  .countdown-num { font-size: clamp(2.4rem, 10vw, 3.5rem); }
+  .countdown-num {
+    font-size: clamp(2.4rem, 10vw, 3.5rem);
+  }
 
   /* ── Gallery ── */
   #gallery .grid {
     grid-template-columns: 1fr !important;
   }
 
-  #gallery .grid > * {
+  #gallery .grid>* {
     grid-column: span 1 !important;
     aspect-ratio: 4 / 3 !important;
   }
 
+  /* ── Location / Venue map ── */
+  .venue-map {
+    height: clamp(300px, 52vh, 380px);
+  }
+
+  .venue-info {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 1.1rem;
+    padding: 1.4rem 1.25rem;
+  }
+
+  .venue-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
   /* ── RSVP ── */
-  .rsvp-form { max-width: 100%; }
-  .radio-group { flex-direction: column; gap: 1.25rem; }
-  .btn-primary { padding: 0.85rem 2rem; width: 100%; justify-content: center; }
+  .rsvp-form {
+    max-width: 100%;
+  }
+
+  .rsvp-card {
+    padding: 2.25rem 1.5rem 2rem;
+  }
+
+  .attend-group {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    width: 100%;
+    justify-content: center;
+  }
 
   /* ── Contact ── */
   #contact .flex {
@@ -942,24 +1657,38 @@ body {
     border: 1px solid var(--secondary);
   }
 
-  #contact .detail-item + .detail-item {
+  #contact .detail-item+.detail-item {
     border-top: 1px solid var(--secondary);
   }
 
   /* ── Closing ── */
-  .closing-script { font-size: clamp(1.8rem, 9vw, 2.8rem); }
+  .closing-script {
+    font-size: clamp(1.8rem, 9vw, 2.8rem);
+  }
 }
 
 /* ── Medium screens (641px–768px) ────────────────────────── */
 @media (min-width: 641px) and (max-width: 768px) {
-  .section { padding: 5.5rem 2rem; }
+  .section {
+    padding: 5.5rem 2rem;
+  }
 
   /* Couple: still row but tighter */
-  #couple .flex { gap: 2.5rem !important; }
-  .couple-name { font-size: clamp(2.5rem, 7vw, 3.5rem); }
+  #couple .flex {
+    gap: 2.5rem !important;
+  }
+
+  .couple-name {
+    font-size: clamp(2.5rem, 7vw, 3.5rem);
+  }
 
   /* Countdown: 2×2 on mid-size tablets */
-  .countdown-wrap { max-width: 480px; margin: 0 auto; }
-  .countdown-item { padding: 0 1.5rem; }
-}
+  .countdown-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+  }
 
+  .countdown-item {
+    padding: 0 1.5rem;
+  }
+}

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malshi &amp; Sadeep — Wedding Invitation · 10th September</title>
-  <meta name="description" content="You are warmly invited to the wedding of Malshi and Sadeep on 10th September at the Lighthouse Hotel, Galle, Sri Lanka." />
+  <title>Malshi &amp; Sadeep — Wedding Invitation · 5th August</title>
+  <meta name="description"
+    content="You are warmly invited to the seaside wedding of Malshi and Sadeep on 5th August at Avenra Beach Hotel, Hikkaduwa, Sri Lanka." />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,508 +19,673 @@
   <link rel="stylesheet" href="styles.css" />
 
   <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪷</text></svg>" />
 </head>
+
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      PETAL CANVAS (full-screen, z below envelope)
 ════════════════════════════════════════════════════════════ -->
-<canvas id="petal-canvas" aria-hidden="true"></canvas>
+  <canvas id="petal-canvas" aria-hidden="true"></canvas>
 
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      ENVELOPE SCREEN (visible on load, dismissed on open)
 ════════════════════════════════════════════════════════════ -->
-<div id="envelope-screen" role="dialog" aria-modal="true" aria-label="Wedding invitation envelope">
+  <div id="envelope-screen" role="dialog" aria-modal="true" aria-label="Wedding invitation envelope">
 
-  <!-- Prompt text above envelope -->
-  <p class="env-hint" id="env-hint">Tap to open your invitation</p>
+    <!-- Prompt text above envelope -->
+    <p class="env-hint" id="env-hint">Tap to open your invitation</p>
 
-  <!-- Envelope wrapper (click target) -->
-  <div id="envelope-wrap"
-       role="button"
-       tabindex="0"
-       aria-label="Open the wedding invitation"
-       onclick="openEnvelope()"
-       onkeydown="if(event.key==='Enter'||event.key===' ')openEnvelope()">
+    <!-- Envelope wrapper (click target) -->
+    <div id="envelope-wrap" role="button" tabindex="0" aria-label="Open the wedding invitation" onclick="openEnvelope()"
+      onkeydown="if(event.key==='Enter'||event.key===' ')openEnvelope()">
 
-    <!-- Body of envelope -->
-    <div class="env-body" id="env-body">
+      <!-- Envelope front (opaque — conceals the letter until it lifts out) -->
+      <div class="env-body" id="env-body">
 
-      <!-- Inner card (slides up when envelope opens) -->
+        <!-- Wax seal -->
+        <div class="env-seal" id="env-seal" aria-hidden="true">
+          <!-- Minimal lotus SVG -->
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20 32 C20 32 8 24 8 14 C8 9 13 6 20 12 C27 6 32 9 32 14 C32 24 20 32 20 32Z" fill="none"
+              stroke="#C6A769" stroke-width="1.2" />
+            <path d="M20 28 C20 28 12 22 12 15 C12 12 15.5 10 20 14 C24.5 10 28 12 28 15 C28 22 20 28 20 28Z"
+              fill="none" stroke="#C6A769" stroke-width="1" />
+            <circle cx="20" cy="20" r="2.5" fill="#C6A769" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- The letter — starts hidden inside, then rises up and OUT,
+           ending in front of the open flap (above the envelope head) -->
       <div class="env-card" id="env-card">
         <div class="env-card-names">Malshi<br />&amp; Sadeep</div>
         <div class="env-card-divider"></div>
-        <p class="env-card-sub">10th September · Galle, Sri Lanka</p>
+        <p class="env-card-sub">5th August · Hikkaduwa, Sri Lanka</p>
       </div>
 
-      <!-- Wax seal -->
-      <div class="env-seal" id="env-seal" aria-hidden="true">
-        <!-- Minimal lotus SVG -->
-        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M20 32 C20 32 8 24 8 14 C8 9 13 6 20 12 C27 6 32 9 32 14 C32 24 20 32 20 32Z" fill="none" stroke="#C6A769" stroke-width="1.2"/>
-          <path d="M20 28 C20 28 12 22 12 15 C12 12 15.5 10 20 14 C24.5 10 28 12 28 15 C28 22 20 28 20 28Z" fill="none" stroke="#C6A769" stroke-width="1"/>
-          <circle cx="20" cy="20" r="2.5" fill="#C6A769"/>
-        </svg>
+      <!-- Envelope flap (the lid that opens) -->
+      <div class="env-flap-wrap" id="env-flap-wrap" aria-hidden="true">
+        <div class="env-flap" id="env-flap"></div>
       </div>
+
+    </div><!-- /envelope-wrap -->
+
+    <!-- Couple names appear below envelope after opening, before page transition -->
+    <div id="env-names-reveal"
+      style="margin-top: 2rem; opacity: 0; transition: opacity 0.8s 0.6s; pointer-events: none; text-align: center;">
+      <p
+        style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.85rem; color: var(--text-soft); letter-spacing: 0.1em;">
+        Malshi &amp; Sadeep are getting married
+      </p>
     </div>
 
-    <!-- Envelope flap (the lid that opens) -->
-    <div class="env-flap-wrap" id="env-flap-wrap" aria-hidden="true">
-      <div class="env-flap" id="env-flap"></div>
-    </div>
+  </div><!-- /envelope-screen -->
 
-  </div><!-- /envelope-wrap -->
-
-  <!-- Couple names appear below envelope after opening, before page transition -->
-  <div id="env-names-reveal"
-       style="margin-top: 2rem; opacity: 0; transition: opacity 0.8s 0.6s; pointer-events: none; text-align: center;">
-    <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.85rem; color: var(--text-soft); letter-spacing: 0.1em;">
-      Malshi &amp; Sadeep are getting married
-    </p>
-  </div>
-
-</div><!-- /envelope-screen -->
-
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      MAIN CONTENT (hidden until envelope dismissed)
 ════════════════════════════════════════════════════════════ -->
-<div id="main-content" style="opacity: 0; transition: opacity 1s ease; visibility: hidden;">
+  <div id="main-content" style="opacity: 0; transition: opacity 1s ease; visibility: hidden;">
 
-  <!-- ── FIXED NAV ─────────────────────────────────────────── -->
-  <nav id="site-nav" aria-label="Page sections">
-    <a href="#invitation">Invitation</a>
-    <a href="#event-details">Details</a>
-    <a href="#traditional">Traditions</a>
-    <a href="#rsvp">RSVP</a>
-    <a href="#contact">Contact</a>
-  </nav>
+    <!-- ── FIXED NAV ─────────────────────────────────────────── -->
+    <nav id="site-nav" aria-label="Page sections">
+      <a href="#invitation">Invitation</a>
+      <a href="#wedding-party">Party</a>
+      <a href="#event-details">Details</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#rsvp">RSVP</a>
+      <a href="#contact">Contact</a>
+    </nav>
 
-  <!-- ── MUSIC TOGGLE ────────────────────────────────────────── -->
-  <button id="music-btn"
-          aria-label="Toggle background music"
-          aria-pressed="false"
-          title="Play music">
-    <!-- Speaker/note icon (SVG inline for crispness) -->
-    <svg id="music-icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M9 18V6l11-3v12M9 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm11-3c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"/>
-    </svg>
-    <svg id="music-icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none;">
-      <path d="M10 4H6v16h4V4zm8 0h-4v16h4V4z"/>
-    </svg>
-  </button>
+    <!-- ── MUSIC TOGGLE ────────────────────────────────────────── -->
+    <button id="music-btn" aria-label="Toggle background music" aria-pressed="false" title="Play music">
+      <!-- Speaker/note icon (SVG inline for crispness) -->
+      <svg id="music-icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M9 18V6l11-3v12M9 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm11-3c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z" />
+      </svg>
+      <svg id="music-icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+        style="display:none;">
+        <path d="M10 4H6v16h4V4zm8 0h-4v16h4V4z" />
+      </svg>
+    </button>
 
-  <!-- ════════════════════════════════════════════════════════
+    <!-- ════════════════════════════════════════════════════════
        1. HERO SECTION
   ═════════════════════════════════════════════════════════ -->
-  <section id="hero" aria-label="Hero">
-    <div class="reveal">
-      <p class="hero-eyebrow">Together with their families</p>
+    <section id="hero" aria-label="Hero">
+      <div class="reveal hero-inner">
+        <p class="hero-eyebrow">Together with their families</p>
 
-      <div class="hero-names" aria-label="Malshi and Sadeep">
-        Malshi
-        <span class="hero-amp">&amp;</span>
-        Sadeep
+        <div class="hero-names" aria-label="Malshi and Sadeep">
+          Malshi
+          <span class="hero-amp">&amp;</span>
+          Sadeep
+        </div>
+
+        <!-- Date flanked by thin gold rules -->
+        <div class="hero-meta">
+          <span class="hero-meta-line" aria-hidden="true"></span>
+          <p class="hero-date">5<sup>th</sup> August</p>
+          <span class="hero-meta-line" aria-hidden="true"></span>
+        </div>
+
+        <p class="hero-venue">Avenra Beach Hotel · Hikkaduwa, Sri Lanka</p>
+
+        <!-- Animated scroll cue -->
+        <button class="hero-scroll"
+          onclick="document.getElementById('invitation').scrollIntoView({behavior:'smooth'})"
+          aria-label="Scroll to invitation">
+          <span>Scroll</span>
+          <span class="hero-scroll-chevron" aria-hidden="true"></span>
+        </button>
       </div>
+    </section>
 
-      <div class="ornament" style="margin-top: 2.5rem;">
-        <span>✦</span>
-      </div>
-
-      <p class="hero-date">Wednesday · 10th September</p>
-      <p class="hero-venue">Lighthouse Hotel, Galle, Sri Lanka</p>
-
-      <!-- Subtle scroll cue -->
-      <button onclick="document.getElementById('invitation').scrollIntoView({behavior:'smooth'})"
-              aria-label="Scroll to invitation"
-              style="
-                display: block;
-                margin: 3.5rem auto 0;
-                background: none;
-                border: none;
-                cursor: pointer;
-                font-family: var(--sans);
-                font-size: 0.62rem;
-                font-weight: 400;
-                letter-spacing: 0.26em;
-                text-transform: uppercase;
-                color: var(--text-faint);
-                transition: color 0.25s;
-              "
-              onmouseover="this.style.color='var(--accent)'"
-              onmouseout="this.style.color='var(--text-faint)'">
-        Scroll ↓
-      </button>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
+    <!-- ════════════════════════════════════════════════════════
        2. INVITATION MESSAGE
   ═════════════════════════════════════════════════════════ -->
-  <section id="invitation" class="section section-alt" aria-label="Invitation message">
-    <div class="reveal">
-      <p class="section-label">The Invitation</p>
-      <h2 class="section-heading">You Are Cordially Invited</h2>
+    <section id="invitation" class="section section-alt" aria-label="Invitation message">
+      <div class="reveal">
+        <p class="section-label">The Invitation</p>
+        <h2 class="section-heading">You Are Cordially Invited</h2>
 
-      <div class="invite-card">
-        <div class="kandyan-divider">❋ ✦ ❋</div>
+        <div class="invite-card">
+          <div class="kandyan-divider">❋ ✦ ❋</div>
 
-        <p class="invite-text" style="margin-top: 1.5rem;">
-          With hearts full of joy and gratitude,<br />
-          the families of <em>Malshi</em> and <em>Sadeep</em><br />
-          joyfully invite you to witness the sacred union<br />
-          of their beloved children.
-        </p>
+          <p class="invite-text" style="margin-top: 1.5rem;">
+            With hearts full of joy and gratitude,<br />
+            the families of <em>Malshi</em> and <em>Sadeep</em><br />
+            joyfully invite you to witness the sacred union<br />
+            of their beloved children.
+          </p>
 
-        <div class="thin-line" style="margin: 2rem auto;"></div>
+          <div class="thin-line" style="margin: 2rem auto;"></div>
 
-        <p class="invite-text">
-          The celebration of their marriage<br />
-          will take place on <em>Wednesday, the 10th of September</em><br />
-          at the <em>Lighthouse Hotel, Galle, Sri Lanka.</em>
-        </p>
+          <p class="invite-text">
+            The celebration of their marriage<br />
+            will take place on <em>Wednesday, the 5th of August</em><br />
+            by the sea at <em>Avenra Beach Hotel, Hikkaduwa, Sri Lanka.</em>
+          </p>
 
-        <div class="thin-line" style="margin: 2rem auto;"></div>
+          <div class="thin-line" style="margin: 2rem auto;"></div>
 
-        <p class="invite-text" style="color: var(--text-soft); font-style: italic;">
-          Your presence and blessings would make this moment<br />
-          an unforgettable memory for our families.
-        </p>
+          <p class="invite-text" style="color: var(--text-soft); font-style: italic;">
+            Your presence and blessings would make this moment<br />
+            an unforgettable memory for our families.
+          </p>
 
-        <div class="kandyan-divider" style="margin-top: 1.5rem;">❋ ✦ ❋</div>
+          <div class="kandyan-divider" style="margin-top: 1.5rem;">❋ ✦ ❋</div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════════════════════
+    <!-- ════════════════════════════════════════════════════════
        3. COUPLE SECTION
   ═════════════════════════════════════════════════════════ -->
-  <section id="couple" class="section" aria-label="The couple">
-    <div class="reveal">
-      <p class="section-label">The Couple</p>
-      <h2 class="section-heading">Bride &amp; Groom</h2>
+    <section id="couple" class="section" aria-label="The couple">
+      <div class="reveal">
+        <p class="section-label">The Couple</p>
+        <h2 class="section-heading">Bride &amp; Groom</h2>
 
-      <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 max-w-2xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 max-w-2xl mx-auto">
 
-        <!-- Bride -->
-        <div class="text-center" style="flex: 1; min-width: 0;">
-          <div class="couple-name">Malshi</div>
-          <p class="couple-role">The Bride</p>
-          <div class="thin-line" style="margin: 1rem auto;"></div>
-          <p class="couple-parentage">
-            Daughter of<br />
-            <!-- CUSTOMIZE: Bride's parents -->
-            Kamal Subasinghe<br />
-            &amp; Ajitha Sirimanna
-          </p>
-        </div>
+          <!-- Bride -->
+          <div class="text-center" style="flex: 1; min-width: 0;">
+            <div class="couple-name">Malshi</div>
+            <p class="couple-role">The Bride</p>
+            <div class="thin-line" style="margin: 1rem auto;"></div>
+            <p class="couple-parentage">
+              Daughter of<br />
+              <!-- CUSTOMIZE: Bride's parents -->
+              Mr and Mrs Subasinghe
+            </p>
+          </div>
 
-        <!-- Motif separator — column on desktop, row on mobile (CSS handles flip) -->
-        <div class="couple-separator" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex-shrink: 0;">
-          <div class="thin-line" style="width: 1px; height: 40px; background: var(--secondary);"></div>
-          <span style="font-family: var(--serif); font-size: 1.8rem; color: var(--accent-light); line-height:1;">✦</span>
-          <div class="thin-line" style="width: 1px; height: 40px; background: var(--secondary);"></div>
-        </div>
+          <!-- Motif separator — column on desktop, row on mobile (CSS handles flip) -->
+          <div class="couple-separator"
+            style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex-shrink: 0;">
+            <div class="thin-line" style="width: 1px; height: 40px; background: var(--secondary);"></div>
+            <span
+              style="font-family: var(--serif); font-size: 1.8rem; color: var(--accent-light); line-height:1;">✦</span>
+            <div class="thin-line" style="width: 1px; height: 40px; background: var(--secondary);"></div>
+          </div>
 
-        <!-- Groom -->
-        <div class="text-center" style="flex: 1; min-width: 0;">
-          <div class="couple-name">Sadeep</div>
-          <p class="couple-role">The Groom</p>
-          <div class="thin-line" style="margin: 1rem auto;"></div>
-          <p class="couple-parentage">
-            Son of<br />
-            <!-- CUSTOMIZE: Groom's parents -->
-            [Father's Name]<br />
-            &amp; [Mother's Name]
-          </p>
-        </div>
+          <!-- Groom -->
+          <div class="text-center" style="flex: 1; min-width: 0;">
+            <div class="couple-name">Sadeep</div>
+            <p class="couple-role">The Groom</p>
+            <div class="thin-line" style="margin: 1rem auto;"></div>
+            <p class="couple-parentage">
+              Son of<br />
+              <!-- CUSTOMIZE: Groom's parents -->
+              [Father's Name]<br />
+              &amp; [Mother's Name]
+            </p>
+          </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       4. EVENT DETAILS
-  ═════════════════════════════════════════════════════════ -->
-  <section id="event-details" class="section section-alt" aria-label="Event details">
-    <div class="reveal">
-      <p class="section-label">Mark Your Calendar</p>
-      <h2 class="section-heading">Event Details</h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x max-w-3xl mx-auto"
-           style="border: 1px solid var(--secondary);">
-
-        <!-- Date -->
-        <div class="detail-item reveal reveal-delay-1">
-          <p class="detail-label">Date</p>
-          <p class="detail-value">
-            10th September
-            <small>Wednesday</small>
-          </p>
-        </div>
-
-        <!-- Time -->
-        <div class="detail-item reveal reveal-delay-2">
-          <p class="detail-label">Time</p>
-          <!-- CUSTOMIZE: Replace with actual time -->
-          <p class="detail-value">
-            To Be Announced
-            <small>Ceremony time TBC</small>
-          </p>
-        </div>
-
-        <!-- Venue -->
-        <div class="detail-item reveal reveal-delay-3">
-          <p class="detail-label">Venue</p>
-          <p class="detail-value">
-            Lighthouse Hotel
-            <small>Galle, Sri Lanka</small>
-          </p>
-        </div>
-
-      </div>
-
-      <p class="text-center mt-6"
-         style="font-family: var(--serif); font-style: italic; font-size: 0.88rem; color: var(--text-faint);">
-        Lighthouse Hotel · Dadella · Galle 80000 · Sri Lanka
-      </p>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       5. LOCATION
-  ═════════════════════════════════════════════════════════ -->
-  <section id="location" class="section text-center" aria-label="Location">
-    <div class="reveal">
-      <p class="section-label">Find Us</p>
-      <h2 class="section-heading">Location</h2>
-
-      <!-- Embedded map -->
-      <div class="max-w-2xl mx-auto mb-8 overflow-hidden"
-           style="border: 1px solid var(--secondary); height: 300px;">
-        <iframe
-          title="Lighthouse Hotel Galle map"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.3!2d80.2137!3d6.0145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae173b1b5b91855%3A0x9f7e0f8ac0e39b7e!2sLighthouse%20Hotel%20Galle!5e0!3m2!1sen!2slk!4v1699000000000!5m2!1sen!2slk"
-          width="100%" height="100%" style="border:0; filter: saturate(0.7) sepia(0.1);" allowfullscreen="" loading="lazy">
-        </iframe>
-      </div>
-
-      <a href="https://maps.google.com/?q=Lighthouse+Hotel+Galle+Sri+Lanka"
-         target="_blank"
-         rel="noopener noreferrer"
-         class="btn-outline"
-         id="maps-btn">
-        <span aria-hidden="true">📍</span>&nbsp; Open in Google Maps
-      </a>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       6. TRADITIONAL SECTION
-  ═════════════════════════════════════════════════════════ -->
-  <section id="traditional" class="section section-alt" aria-label="Sri Lankan traditions">
-    <div class="reveal text-center">
-      <p class="section-label">Sri Lankan Traditions</p>
-      <h2 class="section-heading">A <em>Kandyan</em> Celebration</h2>
-
-      <div class="kandyan-divider">❁ ✦ ❁ ✦ ❁</div>
-
-      <p class="tradition-text" style="margin-top: 2rem;">
-        A Kandyan wedding is a sacred tapestry woven from centuries of tradition.
-        The ceremony begins with the <em>Poruwa</em> — a ceremonial platform
-        adorned with white flowers — where the couple stands together as a symbol of their shared future.
-      </p>
-
-      <p class="tradition-text">
-        The binding of the little fingers with a golden thread,
-        the exchange of gold coins, and the pouring of water over joined hands
-        are ancient rites that bind two souls in love,
-        witnessed by family, community, and the divine.
-      </p>
-
-      <p class="tradition-text">
-        We celebrate not only the union of <em>Malshi</em> and <em>Sadeep</em>
-        but the coming together of two families, two stories, and one beautiful future.
-      </p>
-
-      <div class="kandyan-divider" style="margin-top: 2rem;">❁ ✦ ❁ ✦ ❁</div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       7. COUNTDOWN TIMER
-  ═════════════════════════════════════════════════════════ -->
-  <section id="countdown" class="section text-center" aria-label="Countdown to wedding">
-    <div class="reveal">
-      <p class="section-label">Counting Down</p>
-      <h2 class="section-heading">The Day Approaches</h2>
-
-      <div class="countdown-wrap" id="countdown-timer" aria-live="polite" aria-atomic="true">
-        <div class="countdown-item">
-          <span class="countdown-num" id="cd-days">—</span>
-          <span class="countdown-label">Days</span>
-        </div>
-        <div class="countdown-item">
-          <span class="countdown-num" id="cd-hours">—</span>
-          <span class="countdown-label">Hours</span>
-        </div>
-        <div class="countdown-item">
-          <span class="countdown-num" id="cd-mins">—</span>
-          <span class="countdown-label">Minutes</span>
-        </div>
-        <div class="countdown-item">
-          <span class="countdown-num" id="cd-secs">—</span>
-          <span class="countdown-label">Seconds</span>
         </div>
       </div>
+    </section>
 
-      <p id="cd-passed" class="hidden mt-8"
-         style="font-family: var(--script); font-size: 2.8rem; color: var(--accent-dark);">
-        We are married ✦
-      </p>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       8. GALLERY (layout ready — replace placeholders)
+    <!-- ════════════════════════════════════════════════════════
+       3b. WEDDING PARTY
   ═════════════════════════════════════════════════════════ -->
-  <section id="gallery" class="section section-alt" aria-label="Gallery">
-    <div class="reveal">
-      <p class="section-label">Moments</p>
-      <h2 class="section-heading">Our Story</h2>
+    <section id="wedding-party" class="section section-alt" aria-label="The wedding party">
+      <div class="reveal">
+        <p class="section-label">Our Favourite People</p>
+        <h2 class="section-heading">The Wedding Party</h2>
 
-      <!-- CUSTOMIZE: Replace these divs with <img> tags pointing to real photos -->
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-w-3xl mx-auto">
-        <div class="gallery-placeholder" style="grid-column: span 2; aspect-ratio: 16/9;">
-          <span style="color: var(--text-faint);">Photo coming soon</span>
-        </div>
-        <div class="gallery-placeholder" style="aspect-ratio: 4/5;"></div>
-        <div class="gallery-placeholder" style="aspect-ratio: 4/5;"></div>
-        <div class="gallery-placeholder" style="grid-column: span 2; aspect-ratio: 16/9;">
-          <span style="color: var(--text-faint);">Photo coming soon</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════════════════════
-       9. RSVP
-  ═════════════════════════════════════════════════════════ -->
-  <section id="rsvp" class="section" aria-label="RSVP">
-    <div class="reveal">
-      <p class="section-label">Kindly Reply</p>
-      <h2 class="section-heading">RSVP</h2>
-
-      <p class="text-center mb-10"
-         style="font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--text-soft);">
-        Please respond by 1st September
-      </p>
-
-      <!-- Success state -->
-      <div id="rsvp-success" role="alert">
-        <div class="success-icon">✦</div>
-        <div class="success-heading">Thank You</div>
-        <p class="success-text">
-          Your RSVP has been received.<br />
-          We look forward to celebrating with you.
+        <p class="party-intro">
+          Behind every love story stands a circle of cherished family and friends.
+          These are the dear ones who will stand beside us as we say <em>&ldquo;I do.&rdquo;</em>
         </p>
-      </div>
 
-      <!-- Form -->
-      <form id="rsvp-form" class="rsvp-form" novalidate aria-label="RSVP form">
+        <!-- ── BRIDE'S PARTY ────────────────────────────────── -->
+        <div class="party-group reveal">
+          <h3 class="party-group-title">Bride&rsquo;s Party</h3>
+          <div class="kandyan-divider">❀ ✦ ❀</div>
 
-        <div class="form-group">
-          <label class="form-label" for="rsvp-name">Full Name</label>
-          <input type="text" id="rsvp-name" name="name" class="form-input"
-                 placeholder="Your full name" required autocomplete="name" />
-        </div>
+          <div class="party-grid">
 
-        <div class="form-group">
-          <label class="form-label">Attendance</label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="attending" value="yes" id="att-yes" required />
-              <span>Joyfully accepts</span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="attending" value="no" id="att-no" />
-              <span>Regretfully declines</span>
-            </label>
+            <!-- CUSTOMIZE: swap the monogram for a real photo, e.g.
+                 <div class="party-photo"><img src="party/maid-of-honour.jpg" alt="Name" /></div>
+                 Edit each [Name] and the bio line below it. -->
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Maid of Honour" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Maid of Honour</p>
+                <p class="party-bio">The bride&rsquo;s sister and forever confidante &mdash; her partner in every adventure since day one.</p>
+              </figcaption>
+            </figure>
+
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Bridesmaid" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Bridesmaid</p>
+                <p class="party-bio">A friend since school days, always bringing warmth, laughter, and the very best advice.</p>
+              </figcaption>
+            </figure>
+
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Bridesmaid" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Bridesmaid</p>
+                <p class="party-bio">Cousin, travel buddy, and the calm in every storm &mdash; loved beyond words.</p>
+              </figcaption>
+            </figure>
+
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/women/90.jpg" alt="Flower Girl" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Flower Girl</p>
+                <p class="party-bio">The littlest member of the party, ready to scatter petals and steal hearts.</p>
+              </figcaption>
+            </figure>
+
           </div>
         </div>
 
+        <!-- ── GROOM'S PARTY ────────────────────────────────── -->
+        <div class="party-group reveal">
+          <h3 class="party-group-title">Groom&rsquo;s Party</h3>
+          <div class="kandyan-divider">❀ ✦ ❀</div>
 
-        <div class="form-group">
-          <label class="form-label" for="rsvp-message">Message (optional)</label>
-          <textarea id="rsvp-message" name="message" class="form-textarea"
-                    placeholder="Share your wishes for the couple…" rows="3"></textarea>
-        </div>
+          <div class="party-grid">
 
-        <p id="rsvp-error" class="hidden mb-4"
-           style="font-family: var(--serif); font-style: italic; font-size: 0.9rem; color: #9a3030; text-align: center;">
-        </p>
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Best Man" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Best Man</p>
+                <p class="party-bio">The groom&rsquo;s brother and right hand &mdash; loyal, dependable, and endlessly fun.</p>
+              </figcaption>
+            </figure>
 
-        <div class="text-center" style="margin-top: 2.5rem;">
-          <button type="submit" id="rsvp-submit" class="btn-primary">
-            <span id="rsvp-btn-text">Send RSVP</span>
-          </button>
-        </div>
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Groomsman" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Groomsman</p>
+                <p class="party-bio">A university roommate turned lifelong friend, up for anything at a moment&rsquo;s notice.</p>
+              </figcaption>
+            </figure>
 
-      </form>
-    </div>
-  </section>
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/men/52.jpg" alt="Groomsman" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Groomsman</p>
+                <p class="party-bio">A cousin and partner in mischief since childhood &mdash; first to celebrate, last to leave.</p>
+              </figcaption>
+            </figure>
 
-  <!-- ════════════════════════════════════════════════════════
-       10. CONTACT
-  ═════════════════════════════════════════════════════════ -->
-  <section id="contact" class="section section-alt text-center" aria-label="Contact">
-    <div class="reveal">
-      <p class="section-label">Get In Touch</p>
-      <h2 class="section-heading">Contact</h2>
+            <figure class="party-card">
+              <div class="party-photo"><img src="https://randomuser.me/api/portraits/men/16.jpg" alt="Page Boy" loading="lazy" /></div>
+              <figcaption>
+                <p class="party-name">[Name]</p>
+                <p class="party-role">Page Boy</p>
+                <p class="party-bio">The youngest of the crew, here to carry the rings and charm the crowd.</p>
+              </figcaption>
+            </figure>
 
-      <div class="flex flex-col md:flex-row gap-0 justify-center max-w-md mx-auto divide-y md:divide-y-0 md:divide-x"
-           style="border: 1px solid var(--secondary);">
-
-        <!-- CUSTOMIZE: Real phone numbers -->
-        <div class="detail-item" style="flex: 1;">
-          <p class="detail-label">Bride's Family</p>
-          <p class="detail-value" style="font-size: 1rem;">+94 XX XXX XXXX</p>
-        </div>
-        <div class="detail-item" style="flex: 1;">
-          <p class="detail-label">Groom's Family</p>
-          <p class="detail-value" style="font-size: 1rem;">+94 XX XXX XXXX</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════════════════════
+    <!-- ════════════════════════════════════════════════════════
+       4. EVENT DETAILS
+  ═════════════════════════════════════════════════════════ -->
+    <section id="event-details" class="section" aria-label="Event details">
+      <div class="reveal">
+        <p class="section-label">Mark Your Calendar</p>
+        <h2 class="section-heading">Event Details</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x max-w-3xl mx-auto"
+          style="border: 1px solid var(--secondary);">
+
+          <!-- Date -->
+          <div class="detail-item reveal reveal-delay-1">
+            <p class="detail-label">Date</p>
+            <p class="detail-value">
+              5th August
+              <small>Wednesday</small>
+            </p>
+          </div>
+
+          <!-- Time -->
+          <div class="detail-item reveal reveal-delay-2">
+            <p class="detail-label">Time</p>
+            <!-- CUSTOMIZE: Replace with actual time -->
+            <p class="detail-value">
+              To Be Announced
+              <small>Ceremony time TBC</small>
+            </p>
+          </div>
+
+          <!-- Venue -->
+          <div class="detail-item reveal reveal-delay-3">
+            <p class="detail-label">Venue</p>
+            <p class="detail-value">
+              Avenra Beach Hotel
+              <small>Hikkaduwa, Sri Lanka</small>
+            </p>
+          </div>
+
+        </div>
+
+        <p class="text-center mt-6"
+          style="font-family: var(--serif); font-style: italic; font-size: 0.88rem; color: var(--text-faint);">
+          Avenra Beach Hotel · Galle Road · Narigama · Hikkaduwa 80240 · Sri Lanka
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       4b. ORDER OF EVENTS (TIMELINE)
+  ═════════════════════════════════════════════════════════ -->
+    <section id="schedule" class="section section-alt" aria-label="Order of events">
+      <div class="reveal">
+        <p class="section-label">The Celebration</p>
+        <h2 class="section-heading">Order of Events</h2>
+
+        <!-- CUSTOMIZE: update the times below once the schedule is confirmed -->
+        <ol class="timeline">
+          <li class="timeline-item reveal">
+            <span class="timeline-marker" aria-hidden="true"></span>
+            <p class="timeline-time">4:30 in the Afternoon</p>
+            <h3 class="timeline-title">Arrival &amp; Welcome Drinks</h3>
+            <p class="timeline-desc">Arrive at Avenra Beach and settle in with a refreshing welcome by the shore.</p>
+          </li>
+
+          <li class="timeline-item reveal">
+            <span class="timeline-marker" aria-hidden="true"></span>
+            <p class="timeline-time">5:00 in the Evening</p>
+            <h3 class="timeline-title">The Wedding Ceremony</h3>
+            <p class="timeline-desc">Join us on the sand as Malshi &amp; Sadeep exchange their vows beside the ocean.</p>
+          </li>
+
+          <li class="timeline-item reveal">
+            <span class="timeline-marker" aria-hidden="true"></span>
+            <p class="timeline-time">6:00 in the Evening</p>
+            <h3 class="timeline-title">Sunset Cocktails &amp; Photographs</h3>
+            <p class="timeline-desc">Celebrate with drinks and canapés as the sun melts into the Indian Ocean.</p>
+          </li>
+
+          <li class="timeline-item reveal">
+            <span class="timeline-marker" aria-hidden="true"></span>
+            <p class="timeline-time">7:30 in the Evening</p>
+            <h3 class="timeline-title">Reception Dinner</h3>
+            <p class="timeline-desc">A seaside feast to toast the newlyweds beneath the stars.</p>
+          </li>
+
+          <li class="timeline-item reveal">
+            <span class="timeline-marker" aria-hidden="true"></span>
+            <p class="timeline-time">9:00 till Late</p>
+            <h3 class="timeline-title">Dancing &amp; Celebration</h3>
+            <p class="timeline-desc">Kick off your shoes and dance the night away with the happy couple.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       5. LOCATION
+  ═════════════════════════════════════════════════════════ -->
+    <section id="location" class="section text-center" aria-label="Location">
+      <div class="reveal">
+        <p class="section-label">Find Us</p>
+        <h2 class="section-heading">Location</h2>
+
+        <!-- Venue map card -->
+        <div class="venue-card">
+          <div class="venue-map">
+            <iframe title="Avenra Beach Hotel Hikkaduwa map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.051080361991!2d80.1111567!3d6.1238282!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae177c29139780b%3A0x63d0808cbc80cc8f!2sAvenra%20Beach%20Hotel!5e0!3m2!1sen!2slk!4v1781844806775!5m2!1sen!2slk"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+
+          <div class="venue-info">
+            <div class="venue-info-text">
+              <p class="venue-name">Avenra Beach Hotel</p>
+              <p class="venue-address">Galle Road · Narigama · Hikkaduwa 80240 · Sri Lanka</p>
+            </div>
+            <a href="https://maps.google.com/?q=Avenra+Beach+Hotel+Hikkaduwa+Sri+Lanka" target="_blank"
+              rel="noopener noreferrer" class="btn-outline venue-btn" id="maps-btn">
+              <span aria-hidden="true">📍</span>&nbsp; Directions
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       6. A SEASIDE CELEBRATION
+  ═════════════════════════════════════════════════════════ -->
+    <section id="seaside" class="section section-alt" aria-label="A celebration by the sea">
+      <div class="reveal text-center">
+        <p class="section-label">By the Ocean</p>
+        <h2 class="section-heading">A <em>Seaside</em> Celebration</h2>
+
+        <div class="kandyan-divider">❁ ✦ ❁ ✦ ❁</div>
+
+        <p class="tradition-text" style="margin-top: 2rem;">
+          There is something timeless about love and the sea — both vast, deep,
+          and ever-changing, yet steady at heart. We chose the golden shores of
+          <em>Hikkaduwa</em> to begin our forever, where the rhythm of the waves
+          will carry our vows.
+        </p>
+
+        <p class="tradition-text">
+          As the sun sets over the Indian Ocean, we invite you to celebrate with
+          bare feet in the sand, a gentle sea breeze, and hearts full of joy —
+          a relaxed and unforgettable evening by the water.
+        </p>
+
+        <div class="dress-note">
+          <p class="dress-note-label">A Little Note on Attire</p>
+          <p class="dress-note-text">
+            Beach formal — light fabrics and easy elegance.
+            Feel free to slip off your shoes for the sand.
+          </p>
+        </div>
+
+        <div class="kandyan-divider" style="margin-top: 2.5rem;">❁ ✦ ❁ ✦ ❁</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       7. COUNTDOWN TIMER
+  ═════════════════════════════════════════════════════════ -->
+    <section id="countdown" class="section text-center" aria-label="Countdown to wedding">
+      <div class="reveal">
+        <p class="section-label">Counting Down</p>
+        <h2 class="section-heading">The Day Approaches</h2>
+
+        <div class="countdown-wrap" id="countdown-timer" aria-live="polite" aria-atomic="true">
+          <div class="countdown-item">
+            <span class="countdown-num" id="cd-days">—</span>
+            <span class="countdown-label">Days</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-num" id="cd-hours">—</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-num" id="cd-mins">—</span>
+            <span class="countdown-label">Minutes</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-num" id="cd-secs">—</span>
+            <span class="countdown-label">Seconds</span>
+          </div>
+        </div>
+
+        <p id="cd-passed" class="hidden mt-8"
+          style="font-family: var(--script); font-size: 2.8rem; color: var(--accent-dark);">
+          We are married ✦
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       8. GALLERY (layout ready — replace placeholders)
+  ═════════════════════════════════════════════════════════ -->
+    <section id="gallery" class="section section-alt" aria-label="Gallery">
+      <div class="reveal">
+        <p class="section-label">Moments</p>
+        <h2 class="section-heading">Our Story</h2>
+
+        <!-- CUSTOMIZE: replace the sample image URLs below with your own photos -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 max-w-3xl mx-auto">
+          <img class="gallery-img" src="https://picsum.photos/seed/malshi-sadeep-1/900/506" alt="A favourite moment" loading="lazy"
+            style="grid-column: span 2; aspect-ratio: 16/9;" />
+          <img class="gallery-img" src="https://picsum.photos/seed/malshi-sadeep-2/480/600" alt="A favourite moment" loading="lazy"
+            style="aspect-ratio: 4/5;" />
+          <img class="gallery-img" src="https://picsum.photos/seed/malshi-sadeep-3/480/600" alt="A favourite moment" loading="lazy"
+            style="aspect-ratio: 4/5;" />
+          <img class="gallery-img" src="https://picsum.photos/seed/malshi-sadeep-4/900/506" alt="A favourite moment" loading="lazy"
+            style="grid-column: span 2; aspect-ratio: 16/9;" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       9. RSVP
+  ═════════════════════════════════════════════════════════ -->
+    <section id="rsvp" class="section" aria-label="RSVP">
+      <div class="reveal">
+        <p class="section-label">Kindly Reply</p>
+        <h2 class="section-heading">RSVP</h2>
+
+        <p class="rsvp-deadline">Kindly respond on or before the 20th of July</p>
+
+        <div class="rsvp-card">
+
+          <!-- Success state -->
+          <div id="rsvp-success" role="alert">
+          <div class="success-icon">✦</div>
+          <div class="success-heading">Thank You</div>
+          <p class="success-text">
+            Your RSVP has been received.<br />
+            We look forward to celebrating with you.
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form id="rsvp-form" class="rsvp-form" novalidate aria-label="RSVP form">
+
+          <div class="form-group">
+            <label class="form-label" for="rsvp-name">Full Name</label>
+            <input type="text" id="rsvp-name" name="name" class="form-input" placeholder="Your full name" required
+              autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Will you celebrate with us?</label>
+            <div class="attend-group">
+              <label class="attend-option">
+                <input type="radio" name="attending" value="yes" id="att-yes" required />
+                <span class="attend-card">
+                  <span class="attend-mark" aria-hidden="true">&#10003;</span>
+                  <span class="attend-text">Joyfully accepts</span>
+                </span>
+              </label>
+              <label class="attend-option">
+                <input type="radio" name="attending" value="no" id="att-no" />
+                <span class="attend-card">
+                  <span class="attend-mark" aria-hidden="true">&#10003;</span>
+                  <span class="attend-text">Regretfully declines</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="form-label" for="rsvp-message">Message (optional)</label>
+            <textarea id="rsvp-message" name="message" class="form-textarea"
+              placeholder="Share your wishes for the couple…" rows="3"></textarea>
+          </div>
+
+          <p id="rsvp-error" class="hidden mb-4"
+            style="font-family: var(--serif); font-style: italic; font-size: 0.9rem; color: #9a3030; text-align: center;">
+          </p>
+
+          <div class="rsvp-submit-row">
+            <button type="submit" id="rsvp-submit" class="btn-primary">
+              <span id="rsvp-btn-text">Send RSVP</span>
+              <span class="btn-arrow" aria-hidden="true">&#8594;</span>
+            </button>
+          </div>
+
+        </form>
+
+        </div><!-- /rsvp-card -->
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+       10. CONTACT
+  ═════════════════════════════════════════════════════════ -->
+    <section id="contact" class="section section-alt text-center" aria-label="Contact">
+      <div class="reveal">
+        <p class="section-label">Get In Touch</p>
+        <h2 class="section-heading">Contact</h2>
+
+        <div class="flex flex-col md:flex-row gap-0 justify-center max-w-md mx-auto divide-y md:divide-y-0 md:divide-x"
+          style="border: 1px solid var(--secondary);">
+
+          <!-- CUSTOMIZE: Real phone numbers -->
+          <div class="detail-item" style="flex: 1;">
+            <p class="detail-label">Bride's Family</p>
+            <p class="detail-value" style="font-size: 1rem;">+94 XX XXX XXXX</p>
+          </div>
+          <div class="detail-item" style="flex: 1;">
+            <p class="detail-label">Groom's Family</p>
+            <p class="detail-value" style="font-size: 1rem;">+94 XX XXX XXXX</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
        11. CLOSING
   ═════════════════════════════════════════════════════════ -->
-  <section id="closing" class="section text-center" aria-label="Closing">
-    <div class="reveal">
-      <div class="kandyan-divider">❁ ✦ ❁</div>
+    <section id="closing" class="section text-center" aria-label="Closing">
+      <div class="reveal">
+        <div class="kandyan-divider">❁ ✦ ❁</div>
 
-      <p class="closing-script" style="margin: 2.5rem 0;">
-        We look forward to<br />celebrating with you
-      </p>
+        <p class="closing-script" style="margin: 2.5rem 0;">
+          We look forward to<br />celebrating with you
+        </p>
 
-      <div class="thin-line"></div>
+        <div class="thin-line"></div>
 
-      <p style="font-family: var(--script); font-size: 2.8rem; color: var(--accent-dark); margin-top: 1.75rem; line-height: 1.1;">
-        Malshi &amp; Sadeep
-      </p>
+        <p
+          style="font-family: var(--script); font-size: 2.8rem; color: var(--accent-dark); margin-top: 1.75rem; line-height: 1.1;">
+          Malshi &amp; Sadeep
+        </p>
 
-      <p style="font-family: var(--sans); font-size: 0.65rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-faint); margin-top: 1rem;">
-        10th September · Lighthouse Hotel · Galle · Sri Lanka
-      </p>
+        <p
+          style="font-family: var(--sans); font-size: 0.65rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-faint); margin-top: 1rem;">
+          5th August · Avenra Beach Hotel · Hikkaduwa · Sri Lanka
+        </p>
 
-      <div class="kandyan-divider" style="margin-top: 2rem;">❁ ✦ ❁</div>
-    </div>
-  </section>
+        <div class="kandyan-divider" style="margin-top: 2rem;">❁ ✦ ❁</div>
+      </div>
+    </section>
 
-  <!-- Footer -->
-  <footer style="
+    <!-- Footer -->
+    <footer style="
     padding: 1.5rem;
     text-align: center;
     background: var(--bg-warm);
@@ -528,22 +695,21 @@
     color: var(--text-faint);
     letter-spacing: 0.08em;
   ">
-    Made with ♥ for Malshi &amp; Sadeep ·
-    <a href="admin.html"
-       style="color: var(--accent); text-decoration: none; transition: color 0.2s;"
-       onmouseover="this.style.color='var(--accent-dark)'"
-       onmouseout="this.style.color='var(--accent)'">
-      Kovi
-    </a>
-  </footer>
+      Made with ♥ for Malshi &amp; Sadeep ·
+      <a href="admin.html" style="color: var(--accent); text-decoration: none; transition: color 0.2s;"
+        onmouseover="this.style.color='var(--accent-dark)'" onmouseout="this.style.color='var(--accent)'">
+        Kovi
+      </a>
+    </footer>
 
-</div><!-- /main-content -->
+  </div><!-- /main-content -->
 
-<!-- Background music — starts only after envelope interaction -->
-<audio id="bg-music" loop preload="none">
-  <source src="Pufino_Harmony.mp3" type="audio/mpeg" />
-</audio>
+  <!-- Background music — starts only after envelope interaction -->
+  <audio id="bg-music" loop preload="none">
+    <source src="Pufino_Harmony.mp3" type="audio/mpeg" />
+  </audio>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>

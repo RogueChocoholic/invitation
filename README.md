@@ -2,7 +2,7 @@
 
 A premium, Sri Lankan-inspired digital wedding invitation with RSVP system and admin dashboard.
 
-**10th September · Lighthouse Hotel, Galle, Sri Lanka**
+**5th August · Avenra Beach Hotel, Hikkaduwa, Sri Lanka**
 
 ## Quick Start
 
